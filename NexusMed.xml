@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="NexusMed.xsl"?>
+
+<Hopital
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="NexusMed.xsd">
+
+ <medecin
+        cin="AA12345"
+        genre="masculin"
+        nom="Dupont"
+        prenom="Jean"
+        numero_somme="M001"
+        specialite="Cardiologie"
+        service="Cardiologie">
+        <phone>portable</phone>
+        <email>professionnels</email>
+    </medecin>
+
+      <medecin
+        cin="A12352"
+        genre="masculin"
+        nom="Saif"
+        prenom="EL JAHIDI"
+        numero_somme="M002"
+        specialite="Cardiologie"
+        service="Cardiologie">
+        <phone>portable</phone>
+        <email>professionnels</email>
+    </medecin>
+   
+
+    <patient
+        cin="BB67890"
+        genre="feminin"
+        nom="Martin"
+        prenom="Sophie"
+        numero_dossier="P001"
+        date="2025-11-10">
+
+        <phone>fixe</phone>
+        <email>personnels</email>
+
+        <adresse rue="Rue des Fleurs" numero="12" ville="Safi"/>
+    </patient>
+
+    <consultation
+        code="C001"
+        date="2025-11-09"
+        heure="09:30:00"
+        diagnostique="Hypertension"
+        ref_medecin="M001"
+        ref_patient="P001">
+
+        <medicament
+            code="MED001"
+            nom_commercial="Cardiol"
+            posologie="1 comprimé matin et soir"
+            duree_traitement="15 jours"
+            prix="120.50"
+            principe_actif="Amlodipine"
+            date_peremption="2026-06-01"
+            labo_fabricant="PharmaMaroc"
+            forme="comprime"/>
+    </consultation>
+
+    <controle_medical
+        date="2025-11-15"
+        ref_consultation="C001">
+
+        <avis
+            ref_medecin="M001"
+            qualite_diagnostic="Bonne"
+            qualite_traitement="Très bonne"
+            avis="Amélioration observée"/>
+    </controle_medical>
+
+    
+</Hopital>

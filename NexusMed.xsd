@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:element name="Hopital">
+        <xsd:complexType>  
+            <xsd:sequence>
+                <xsd:element name="medecin" minOccurs="1" maxOccurs="unbounded" type="medecin_type" />
+                <xsd:element name="patient" minOccurs="1" maxOccurs="unbounded" type="patient_type" />
+                <xsd:element name="consultation" minOccurs="1" maxOccurs="unbounded" type="consultation_type" />
+                <xsd:element name="controle_medical" minOccurs="0" maxOccurs="unbounded" type="controle_medical_type" />
+            </xsd:sequence>
+        </xsd:complexType>
+
+        <!-- ===================== -->
+        <!-- PRIMARY KEYS          -->
+        <!-- ===================== -->
+        <xsd:key name="KeyMedecin">
+            <xsd:selector xpath="medecin"/>
+            <xsd:field xpath="@numero_somme"/>
+        </xsd:key>
+
+        <xsd:key name="KeyPatient">
+            <xsd:selector xpath="patient"/>
+            <xsd:field xpath="@numero_dossier"/>
+        </xsd:key>
+
+        <xsd:key name="KeyConsultation">
+            <xsd:selector xpath="consultation"/>
+            <xsd:field xpath="@code"/>
+        </xsd:key>
+
+        <xsd:key name="KeyMedicament">
+            <xsd:selector xpath="consultation/medicament"/>
+            <xsd:field xpath="@code"/>
+        </xsd:key>
+
+        <!-- ===================== -->
+        <!-- FOREIGN KEYS          -->
+        <!-- ===================== -->
+        <xsd:keyref name="FK_Consultation_Medecin" refer="KeyMedecin">
+            <xsd:selector xpath="consultation"/>
+            <xsd:field xpath="@ref_medecin"/>
+        </xsd:keyref>
+
+        <xsd:keyref name="FK_Consultation_Patient" refer="KeyPatient">
+            <xsd:selector xpath="consultation"/>
+            <xsd:field xpath="@ref_patient"/>
+        </xsd:keyref>
+
+        <xsd:keyref name="FK_Controle_Consultation" refer="KeyConsultation">
+            <xsd:selector xpath="controle_medical"/>
+            <xsd:field xpath="@ref_consultation"/>
+        </xsd:keyref>
+    </xsd:element>
+
+    <!-- ===================== -->
+    <!-- PERSONNE_TYPE         -->
+    <!-- ===================== -->
+    <xsd:complexType name="personne_type">
+        <xsd:sequence>
+            <xsd:element name="phone" type="phone_type" minOccurs="1" maxOccurs="unbounded"/>
+            <xsd:element name="email" type="email_type" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="cin" use="required"/>
+        <xsd:attribute name="genre">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:token">
+                    <xsd:enumeration value="feminin"/>
+                    <xsd:enumeration value="masculin"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute name="nom" use="required"/>
+        <xsd:attribute name="prenom" use="required"/>
+    </xsd:complexType>
+
+    <!-- ===================== -->
+    <!-- MEDECIN_TYPE          -->
+    <!-- ===================== -->
+    <xsd:complexType name="medecin_type">
+        <xsd:complexContent>
+            <xsd:extension base="personne_type">
+                <xsd:attribute name="numero_somme" use="required"/>
+                <xsd:attribute name="specialite" use="required"/>
+                <xsd:attribute name="service" default="Chirurgie">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:token">
+                            <xsd:enumeration value="Cardiologie"/>
+                            <xsd:enumeration value="Pédiatrie"/>
+                            <xsd:enumeration value="Chirurgie"/>
+                            <xsd:enumeration value="Radiologie"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- ===================== -->
+    <!-- PATIENT_TYPE          -->
+    <!-- ===================== -->
+    <xsd:complexType name="patient_type">
+        <xsd:complexContent>
+            <xsd:extension base="personne_type">
+                <xsd:sequence>
+                    <xsd:element name="adresse" type="adresse_type" maxOccurs="unbounded"/>
+                </xsd:sequence>
+                <xsd:attribute name="numero_dossier" use="required"/>
+                <xsd:attribute name="date" type="xsd:date" use="required"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- ===================== -->
+    <!-- CONSULTATION_TYPE      -->
+    <!-- ===================== -->
+    <xsd:complexType name="consultation_type">
+        <xsd:sequence>
+            <xsd:element name="medicament" type="medicament_type"/>
+        </xsd:sequence>
+        <xsd:attribute name="code" use="required"/>
+        <xsd:attribute name="date" type="xsd:date" use="required"/>
+        <xsd:attribute name="heure" type="xsd:time" use="required"/>
+        <xsd:attribute name="diagnostique" use="required"/>
+        <xsd:attribute name="ref_medecin" use="required"/>
+        <xsd:attribute name="ref_patient" use="required"/>
+    </xsd:complexType>
+
+    <!-- ===================== -->
+    <!-- MEDICAMENT_TYPE       -->
+    <!-- ===================== -->
+    <xsd:complexType name="medicament_type">
+        <xsd:attribute name="posologie" use="required"/>
+        <xsd:attribute name="duree_traitement" use="required"/>
+        <xsd:attribute name="code" use="required"/>
+        <xsd:attribute name="nom_commercial" use="required"/>
+        <xsd:attribute name="prix" type="xsd:double" use="required"/>
+        <xsd:attribute name="principe_actif" use="required"/>
+        <xsd:attribute name="date_peremption" type="xsd:date" use="required"/>
+        <xsd:attribute name="labo_fabricant" use="required"/>
+        <xsd:attribute name="forme" default="gelule">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:token">
+                    <xsd:enumeration value="comprime"/>
+                    <xsd:enumeration value="gelule"/>
+                    <xsd:enumeration value="sirop"/>
+                    <xsd:enumeration value="injection"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <!-- ===================== -->
+    <!-- SIMPLE TYPES          -->
+    <!-- ===================== -->
+    <xsd:simpleType name="phone_type">
+        <xsd:restriction base="xsd:token">
+            <xsd:enumeration value="portable"/>
+            <xsd:enumeration value="fixe"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="email_type">
+        <xsd:restriction base="xsd:token">
+            <xsd:enumeration value="personnels"/>
+            <xsd:enumeration value="professionnels"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- ===================== -->
+    <!-- ADRESSE_TYPE          -->
+    <!-- ===================== -->
+    <xsd:complexType name="adresse_type">
+        <xsd:attribute name="rue" use="required"/>
+        <xsd:attribute name="numero" use="required"/>
+        <xsd:attribute name="ville" use="required"/>
+    </xsd:complexType>
+
+    <!-- ===================== -->
+    <!-- CONTROLE_MEDICAL_TYPE -->
+    <!-- ===================== -->
+    <xsd:complexType name="controle_medical_type">
+        <xsd:sequence>
+            <xsd:element name="avis" type="avis_type" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="date" type="xsd:date" use="required"/>
+        <xsd:attribute name="ref_consultation" use="required"/>
+    </xsd:complexType>
+
+    <!-- ===================== -->
+    <!-- AVIS_TYPE             -->
+    <!-- ===================== -->
+    <xsd:complexType name="avis_type">
+        <xsd:attribute name="ref_medecin" use="required"/>
+        <xsd:attribute name="qualite_diagnostic" use="required"/>
+        <xsd:attribute name="qualite_traitement" use="required"/>
+        <xsd:attribute name="avis" use="required"/>
+    </xsd:complexType>
+
+</xsd:schema>
