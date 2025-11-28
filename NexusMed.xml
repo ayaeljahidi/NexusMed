@@ -5,29 +5,45 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="NexusMed.xsd">
 
- <medecin
-        cin="AA12345"
-        genre="masculin"
-        nom="Dupont"
-        prenom="Jean"
-        numero_somme="M001"
-        specialite="Cardiologie"
-        service="Cardiologie">
-        <phone>portable</phone>
-        <email>professionnels</email>
-    </medecin>
 
       <medecin
         cin="A12352"
         genre="masculin"
-        nom="Saif"
+        nom="AYA"
         prenom="EL JAHIDI"
         numero_somme="M002"
         specialite="Cardiologie"
         service="Cardiologie">
-        <phone>portable</phone>
-        <email>professionnels</email>
+        <phone>
+            <type>fixe</type>
+            <numero>0523123456</numero>
+        </phone>
+
+        <email>
+            <categorie>personnels</categorie>
+            <adresse>aya@gmail.com</adresse>
+        </email>
+        
     </medecin>
+
+ <medecin
+        cin="AA12345"
+        genre="masculin"
+        nom="Errafi"
+        prenom="Imrane"
+        numero_somme="M001"
+        specialite="Cardiologie"
+        service="Cardiologie">
+        <phone>
+            <type>portable</type>
+            <numero>0612345678</numero>
+        </phone>
+        <email>
+            <categorie>personnels</categorie>
+            <adresse>imrane@gmail.com</adresse>
+        </email>
+    </medecin>
+
    
 
     <patient
@@ -37,9 +53,15 @@
         prenom="Sophie"
         numero_dossier="P001"
         date="2025-11-10">
+        <phone>
+         <type>fixe</type>
+         <numero>0523123456</numero>
+        </phone>
 
-        <phone>fixe</phone>
-        <email>personnels</email>
+        <email>
+          <categorie>personnels</categorie>
+          <adresse>sophie@gmail.com</adresse>
+        </email>
 
         <adresse rue="Rue des Fleurs" numero="12" ville="Safi"/>
     </patient>
@@ -63,6 +85,8 @@
             labo_fabricant="PharmaMaroc"
             forme="comprime"/>
     </consultation>
+
+    
 
     <controle_medical
         date="2025-11-15"

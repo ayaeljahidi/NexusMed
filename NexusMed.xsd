@@ -153,19 +153,51 @@
     <!-- ===================== -->
     <!-- SIMPLE TYPES          -->
     <!-- ===================== -->
-    <xsd:simpleType name="phone_type">
-        <xsd:restriction base="xsd:token">
-            <xsd:enumeration value="portable"/>
-            <xsd:enumeration value="fixe"/>
-        </xsd:restriction>
-    </xsd:simpleType>
+    <xsd:complexType name="phone_type">
+    <xsd:sequence>
+        <xsd:element name="type">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:token">
+                    <xsd:enumeration value="portable"/>
+                    <xsd:enumeration value="fixe"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:element>
 
-    <xsd:simpleType name="email_type">
-        <xsd:restriction base="xsd:token">
-            <xsd:enumeration value="personnels"/>
-            <xsd:enumeration value="professionnels"/>
-        </xsd:restriction>
-    </xsd:simpleType>
+        <xsd:element name="numero">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <!-- Numéro marocain : accepte 10 chiffres -->
+                    <xsd:pattern value="\d{10}"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:element>
+    </xsd:sequence>
+</xsd:complexType>
+
+
+    <xsd:complexType name="email_type">
+    <xsd:sequence>
+        <xsd:element name="categorie">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:token">
+                    <xsd:enumeration value="personnels"/>
+                    <xsd:enumeration value="professionnels"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:element>
+
+        <xsd:element name="adresse">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <!-- Simple email regex (safe for XML Schema) -->
+                    <xsd:pattern value="[^@\s]+@[^@\s]+\.[^@\s]+"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:element>
+    </xsd:sequence>
+</xsd:complexType>
+
 
     <!-- ===================== -->
     <!-- ADRESSE_TYPE          -->

@@ -2,6 +2,10 @@
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+    <!-- Déclaration des clés au niveau racine -->
+    <xsl:key name="medecin-key" match="medecin" use="@numero_somme"/>
+    <xsl:key name="patient-key" match="patient" use="@numero_dossier"/>
+
     <xsl:template match="/">
         <html>
             <head>
@@ -547,7 +551,7 @@
                                                         <xsl:value-of select="substring(@prenom, 1, 1)"/><xsl:value-of select="substring(@nom, 1, 1)"/>
                                                     </div>
                                                     <div>
-                                                        <strong><xsl:value-of select="@prenom"/> <xsl:value-of select="@nom"/></strong>
+                                                        <strong><xsl:value-of select="@prenom"/><xsl:text> </xsl:text><xsl:value-of select="@nom"/></strong>
                                                         <div style="font-size: 0.8rem; color: var(--gray);">CIN: <xsl:value-of select="@cin"/></div>
                                                     </div>
                                                 </div>
@@ -560,8 +564,12 @@
                                             <td><xsl:value-of select="@service"/></td>
                                             <td>
                                                 <div style="display: flex; flex-direction: column; gap: 5px;">
-                                                    <span>📞 <xsl:value-of select="phone"/></span>
-                                                    <span>📧 <xsl:value-of select="email"/></span>
+                                                    <xsl:for-each select="phone">
+                                                        <span>📞 <xsl:value-of select="numero"/> (<xsl:value-of select="type"/>)</span>
+                                                    </xsl:for-each>
+                                                    <xsl:for-each select="email">
+                                                        <span>📧 <xsl:value-of select="adresse"/> (<xsl:value-of select="categorie"/>)</span>
+                                                    </xsl:for-each>
                                                 </div>
                                             </td>
                                             <td>
@@ -609,7 +617,7 @@
                                                         <xsl:value-of select="substring(@prenom, 1, 1)"/><xsl:value-of select="substring(@nom, 1, 1)"/>
                                                     </div>
                                                     <div>
-                                                        <strong><xsl:value-of select="@prenom"/> <xsl:value-of select="@nom"/></strong>
+                                                        <strong><xsl:value-of select="@prenom"/><xsl:text> </xsl:text><xsl:value-of select="@nom"/></strong>
                                                         <div style="font-size: 0.8rem; color: var(--gray);">CIN: <xsl:value-of select="@cin"/></div>
                                                     </div>
                                                 </div>
@@ -631,16 +639,22 @@
                                                 <strong><xsl:value-of select="@date"/></strong>
                                             </td>
                                             <td>
-                                                <div>
-                                                    🏠 <xsl:value-of select="adresse/@rue"/>, 
-                                                    <xsl:value-of select="adresse/@numero"/> - 
-                                                    <xsl:value-of select="adresse/@ville"/>
-                                                </div>
+                                                <xsl:for-each select="adresse">
+                                                    <div>
+                                                        🏠 <xsl:value-of select="@rue"/>, 
+                                                        <xsl:value-of select="@numero"/> - 
+                                                        <xsl:value-of select="@ville"/>
+                                                    </div>
+                                                </xsl:for-each>
                                             </td>
                                             <td>
                                                 <div style="display: flex; flex-direction: column; gap: 5px;">
-                                                    <span>📞 <xsl:value-of select="phone"/></span>
-                                                    <span>📧 <xsl:value-of select="email"/></span>
+                                                    <xsl:for-each select="phone">
+                                                        <span>📞 <xsl:value-of select="numero"/> (<xsl:value-of select="type"/>)</span>
+                                                    </xsl:for-each>
+                                                    <xsl:for-each select="email">
+                                                        <span>📧 <xsl:value-of select="adresse"/> (<xsl:value-of select="categorie"/>)</span>
+                                                    </xsl:for-each>
                                                 </div>
                                             </td>
                                         </tr>
@@ -690,14 +704,20 @@
                                                 </strong>
                                             </td>
                                             <td>
-                                                <span class="badge badge-success">
-                                                    Dr. <xsl:value-of select="@ref_medecin"/>
-                                                </span>
+                                                <xsl:variable name="medecinRef" select="@ref_medecin"/>
+                                                <xsl:for-each select="key('medecin-key', $medecinRef)">
+                                                    <span class="badge badge-success">
+                                                        Dr. <xsl:value-of select="@prenom"/><xsl:text> </xsl:text><xsl:value-of select="@nom"/>
+                                                    </span>
+                                                </xsl:for-each>
                                             </td>
                                             <td>
-                                                <span class="badge badge-warning">
-                                                    Pat. <xsl:value-of select="@ref_patient"/>
-                                                </span>
+                                                <xsl:variable name="patientRef" select="@ref_patient"/>
+                                                <xsl:for-each select="key('patient-key', $patientRef)">
+                                                    <span class="badge badge-warning">
+                                                        <xsl:value-of select="@prenom"/><xsl:text> </xsl:text><xsl:value-of select="@nom"/>
+                                                    </span>
+                                                </xsl:for-each>
                                             </td>
                                             <td>
                                                 <div class="medicament-info">
@@ -752,9 +772,12 @@
                                                     </span>
                                                 </td>
                                                 <td>
-                                                    <span class="badge badge-success">
-                                                        Dr. <xsl:value-of select="@ref_medecin"/>
-                                                    </span>
+                                                    <xsl:variable name="medecinRef" select="@ref_medecin"/>
+                                                    <xsl:for-each select="key('medecin-key', $medecinRef)">
+                                                        <span class="badge badge-success">
+                                                            Dr. <xsl:value-of select="@prenom"/><xsl:text> </xsl:text><xsl:value-of select="@nom"/>
+                                                        </span>
+                                                    </xsl:for-each>
                                                 </td>
                                                 <td>
                                                     <span class="badge badge-success">
@@ -787,7 +810,6 @@
                 
                 <script>
                     <![CDATA[
-                    // Add staggered animation to elements
                     document.addEventListener('DOMContentLoaded', function() {
                         const fadeElements = document.querySelectorAll('.fade-in');
                         
@@ -795,7 +817,6 @@
                             el.style.animationDelay = `${index * 0.1}s`;
                         });
                         
-                        // Add interactive effects to table rows
                         const tableRows = document.querySelectorAll('tbody tr');
                         tableRows.forEach(row => {
                             row.addEventListener('mouseenter', function() {
